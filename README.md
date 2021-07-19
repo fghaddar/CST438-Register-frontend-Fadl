@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# CST438 Software Engineering California State University Monterey Bay
+# Student Schedule project Front End application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This application is written in React and requires node.js to be installed.
+
+This project was bootstrapped with the command:
+### npm create-react-app schedule
 
 ## Available Scripts
 
