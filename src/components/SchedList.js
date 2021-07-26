@@ -23,10 +23,13 @@ class SchedList extends Component {
   
   fetchCourses = () => {
     console.log("FETCH");
+    const token = Cookies.get('XSRF-TOKEN');
     fetch(SERVER_URL + `schedule?year=${this.props.location.year}&semester=${this.props.location.semester}`, 
       {  
-        headers: {'Authorization': 'Basic ' + window.btoa('test@csumb.edu:test')} 
-      })
+        method: 'GET', 
+        headers: { 'X-XSRF-TOKEN': token }, 
+        credentials: 'include'
+      } )
     .then((response) => response.json()) 
     .then((responseData) => { 
       console.log("FETCH RESP DATA:"+responseData.courses);
@@ -49,10 +52,8 @@ class SchedList extends Component {
       const token = Cookies.get('XSRF-TOKEN');
       fetch(SERVER_URL + 'schedule/'+id , 
         {method: 'DELETE',
-         headers: {
-            'X-XSRF-TOKEN': token ,
-            'Authorization': 'Basic ' + window.btoa('test@csumb.edu:test') 
-            }
+         headers: { 'X-XSRF-TOKEN': token }, 
+        credentials: 'include'
         })
     .then(res => {
         if (res.ok) {
@@ -81,11 +82,9 @@ class SchedList extends Component {
  
     fetch(SERVER_URL + 'schedule',
       { method: 'POST', 
-        headers: {
-          'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': token,
-          'Authorization': 'Basic ' + window.btoa('test@csumb.edu:test')
-        },
+       headers: { 'Content-Type': 'application/json',
+                  'X-XSRF-TOKEN': token  }, 
+        credentials: 'include', 
         body: JSON.stringify(course)
       })
     .then(res => {
