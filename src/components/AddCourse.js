@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -6,46 +7,55 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-const AddCourse = (props) => {
-  const [open, setOpen] = useState(false);
-  const [course, setCourse] = useState({ });
+// properties addCoure is required, function called when Add clicked.
+class AddCourse extends Component {
+      constructor(props) {
+      super(props);
+      this.state = {open: false, course:{ } };
+    };
+    
+    handleClickOpen = () => {
+      this.setState( {open:true} );
+    };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    handleClose = () => {
+      this.setState( {open:false} );
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleChange = (event) => {
-    setCourse({...course, [event.target.name]: event.target.value});
-  }
+    handleChange = (event) => {
+      this.setState({course:{course_id: event.target.value}});
+    }
 
   // Save course and close modal form
-  const handleAdd = () => {
-    props.addCourse(course);
-    handleClose();
-  }
+    handleAdd = () => {
+       this.props.addCourse(this.state.course);
+       this.handleClose();
+    }
 
-  return (
-    <div>
-      <Button variant="outlined" color="primary" style={{margin: 10}} onClick={handleClickOpen}>
-        Add Course
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add Course</DialogTitle>
-          <DialogContent>
-            <TextField autoFocus fullWidth label="Course Id" name="course_id" 
-              value={course.course_id} onChange={handleChange}/> 
-          </DialogContent>
-          <DialogActions>
-            <Button color="secondary" onClick={handleClose}>Cancel</Button>
-            <Button color="primary" onClick={handleAdd}>Add</Button>
-          </DialogActions>
-        </Dialog>      
-    </div>
-  );
-};
+    render()  { 
+      return (
+          <div>
+            <Button variant="outlined" color="primary" style={{margin: 10}} onClick={this.handleClickOpen}>
+              Add Course
+            </Button>
+            <Dialog open={this.state.open} onClose={this.handleClose}>
+                <DialogTitle>Add Course</DialogTitle>
+                <DialogContent>
+                  <TextField autoFocus fullWidth label="Course Id" name="course_id" onChange={this.handleChange}/> 
+                </DialogContent>
+                <DialogActions>
+                  <Button color="secondary" onClick={this.handleClose}>Cancel</Button>
+                  <Button color="primary" onClick={this.handleAdd}>Add</Button>
+                </DialogActions>
+              </Dialog>      
+          </div>
+      ); 
+    }
+}
+
+// required property:  addCourse is a function to call to perform the Add action
+AddCourse.propTypes = {
+  addCourse : PropTypes.func.isRequired
+}
 
 export default AddCourse;

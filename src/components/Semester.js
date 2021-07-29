@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import {DataGrid} from '@material-ui/data-grid';
-import { Link } from 'react-router-dom'
 import {SEMESTER_LIST} from '../constants.js'
 
 class Semester extends Component {
     constructor(props) {
       super(props);
-      this.state = {selected: 0 };
-    };
- 
+      this.state = {selected: SEMESTER_LIST.length-1 };
+    }
  
    onRadioClick = (event) => {
-    console.log("on click "+JSON.stringify(event.target.value));
+    console.log("Semester.onRadioClick "+JSON.stringify(event.target.value));
     this.setState({selected: event.target.value});
   }
   
-  render() {
-      const irows = SEMESTER_LIST.map((row, index) => ( { id: index, ...row } )); 
-    
+  render() {    
       const icolumns = [
       {
         field: 'id',
@@ -42,20 +42,27 @@ class Semester extends Component {
       ];       
        
     return (
-      <div align="left" >
-            Select a term: 
-            <p/> 
-            <div style={{ height: 400, width: '100%', align:"left"   }}>
-                <DataGrid rows={irows} columns={icolumns} />
-              </div>  
-            <p/> 
-            <Button component={Link} 
-                    to={{pathname:'/schedule' , 
-                    year:SEMESTER_LIST[this.state.selected].year, 
-                    semester:SEMESTER_LIST[this.state.selected].name}} 
-              variant="outlined" color="primary" style={{margin: 10}}>
-              Get Schedule
-            </Button>
+       <div>
+         <AppBar position="static" color="default">
+            <Toolbar>
+               <Typography variant="h6" color="inherit">
+                  Schedule - select a term
+               </Typography>
+            </Toolbar>
+         </AppBar>
+         <div align="left" >
+              <div style={{ height: 400, width: '100%', align:"left"   }}>
+                <DataGrid   rows={SEMESTER_LIST} columns={icolumns} /> 
+                <br/><br/> 
+                <Button component={Link} 
+                        to={{pathname:'/schedule' , 
+                        year:SEMESTER_LIST[this.state.selected].year, 
+                        semester:SEMESTER_LIST[this.state.selected].name}} 
+                  variant="outlined" color="primary" style={{margin: 10}}>
+                  Get Schedule
+                </Button>
+              </div>
+          </div>
       </div>
     )
   }
