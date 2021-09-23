@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,12 +10,15 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import {DataGrid} from '@material-ui/data-grid';
 import {SEMESTER_LIST} from '../constants.js'
+import Cookies from 'js-cookie';
+import {SERVER_URL} from '../constants.js'
+import AddStudent from './AddStudent';
 
 // user selects from a list of  (year, semester) values
 class Semester extends Component {
     constructor(props) {
       super(props);
-      this.state = {selected: SEMESTER_LIST.length-1 };
+      this.state = {selected: SEMESTER_LIST.length-1};
     }
  
    onRadioClick = (event) => {
@@ -20,6 +26,35 @@ class Semester extends Component {
     this.setState({selected: event.target.value});
   }
   
+  addStudent = (student) => {
+    const token = Cookies.get('XSRF-TOKEN');
+  
+    fetch(`${SERVER_URL}/student`,
+    { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json',
+                  'X-XSRF-TOKEN': token  }, 
+      body: JSON.stringify(student)
+      })
+      .then(res => {
+        if (res.ok) {
+          toast.success("Student successfully added", {
+              position: toast.POSITION.BOTTOM_LEFT
+          });
+        } else {
+          toast.error("Error when adding. Either email is in use, or email/student name are null", {
+          position: toast.POSITION.BOTTOM_LEFT
+          });
+        console.error('Post http status =' + res.status);
+        }})
+      .catch(err => {
+        toast.error("Error when adding. Either email is in use, or email/student name are null", {
+              position: toast.POSITION.BOTTOM_LEFT
+          });
+          console.error(err);
+        })
+    }
+
   render() {    
       const icolumns = [
       {
@@ -62,7 +97,11 @@ class Semester extends Component {
                 variant="outlined" color="primary" style={{margin: 10}}>
                 Get Schedule
               </Button>
+              <Button> 
+                <AddStudent addStudent = {this.addStudent} />
+              </Button>
           </div>
+              <ToastContainer autoClose={9000} />   
       </div>
     )
   }

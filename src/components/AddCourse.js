@@ -33,6 +33,33 @@ class AddCourse extends Component {
     }
 
     render()  { 
+      const columns = [
+        { field: 'title', headerName: 'Title', width: 400 },
+        { field: 'section', headerName: 'Section', width: 125 },
+        { field: 'times', headerName: 'Times', width: 200 },
+        { field: 'building', headerName: 'Building', width: 150 },
+        { field: 'room', headerName: 'Room',  width: 150 },
+        { field: 'grade', headerName: 'Grade', width: 150 },
+        {
+          field: 'id',
+          headerName: '  ',
+          sortable: false,
+          width: 200,
+          renderCell: (params) => (
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                style={{ marginLeft: 16 }} 
+                onClick={()=>{this.onDelClick(params.value)}}
+              >
+                Drop
+              </Button>
+          )
+        }
+        ];
+
+        
       return (
           <div>
             <Button variant="outlined" color="primary" style={{margin: 10}} onClick={this.handleClickOpen}>
