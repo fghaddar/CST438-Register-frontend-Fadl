@@ -99,6 +99,7 @@ class Semester extends Component {
               </Button>
               <Button> 
                 <AddStudent addStudent = {this.addStudent} />
+                studentButton
               </Button>
           </div>
               <ToastContainer autoClose={9000} />   
